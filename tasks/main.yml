@@ -1,0 +1,23 @@
+---
+- name: Install dnsmasq
+  yum: name=dnsmasq state=present
+
+- name: Start and enable dnsmasq
+  service:
+    name: dnsmasq
+    state: started
+    enabled: yes
+
+- name: Configure dnsmasq
+  template:
+    src: etc_dnsmasq.conf.j2
+    dest: /etc/dnsmasq.conf
+  notify: restart dnsmasq
+
+- name: Set hosts file
+  template:
+    src: etc_hosts-dnsmasq.j2
+    dest: /etc/hosts-dnsmasq
+  notify: restart dnsmasq
+  tags: dnsmasq
+
